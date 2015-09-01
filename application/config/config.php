@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://127.0.0.1/admin/';
+$config['base_url'] = 'http://127.0.0.1/DX_Project/';
 //$config['base_url'] = 'http://jooli.uenet.cn/admin/';
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'ch';
 
 /*
 |--------------------------------------------------------------------------
