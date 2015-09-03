@@ -152,3 +152,6 @@ form .form-group:last-child {
 	border-top:1px solid #d1e3ed;
 	border-bottom:1px solid #d1e3ed;
 }
+
+/*教室*/
+.hideblock{display: none;}

@@ -32,11 +32,11 @@ class User extends My_Controller {
 		$str_page=$page->create($pageIndex, $pageSize, $totalCount, array(), array());
 		$data['page']=$str_page;
 		$data['users']=$users;
+	    // p($data['page']);die;
 		$this->load->view('User/list',$data);
 	}
 	/**
 	 * 添加用户
-	 * Enter description here ...
 	 */
 	public function add(){
 		$cmd=$this->input->post('cmd');

@@ -15,48 +15,29 @@
     <script type="text/javascript" src="statics/js/jquery.js"></script>
     <script type="text/javascript" src="statics/js/addStudents.js"></script>
     <style type="text/css">
-         #okAddAllstu{display: none;}
+        #okAddAllstu{display: none;}
         .hblock{display: none }
         .rfont{color: red;}        
         .bfont{color: blue;}        
-        .gfont{color: green;}  
-        .mr{margin-right: 20px;}   
-        .texlf{padding-left: 30px;}  
+        .gfont{color: green;}        
     </style>
 </head>
 <body>
     <div class="admin">
         <div class="panel admin-panel">
             <div class="panel-head">
-                <strong>学生列表</strong></div>
+                <strong>回收站</strong></div>
             <div class="padding border-bottom">
                 <input type="button" class="button button-small checkall" name="checkall" id='checkall' value="全选" isAllflag="0" />
-                <input type="button" class="button button-small border-red" value="批量删除"  id="Cancelstu" />
-                <input type="button" class="button button-small border-green" value="添加用户" onclick="location.href='index.php/Node/add';" />
-                <strong class="texlf">查看培训期数:</strong>
-                <select name="" id="myselect">
-                    <option value="">请选择</option>
-                    <?php foreach($group as $v):?>
-                          <?php if ($v['period']==$period):?>
-                                <option value="<?php echo $v['period'];  ?>" selected = "selected">
-                          <?php else: ?>
-                                <option value="<?php echo $v['period'];  ?>">
-                          <?php endif ?>
-                             第<?php echo $v['period'];  ?>期
-                          </option>
-                    <?php endforeach ?>
-                </select>
-            </div>
-            <div class="padding border-bottom">
-                <strong>批量添加用户：</strong>
-                <input type="button" id='addAllstu' class="button button-small border-yellow" value="选择EXCEL" />
-                <input type="button" id='okAddAllstu' class="button button-small border-blue" value="确定添加" />
+                <input type="button" class="button button-small border-blue" value="批量复原"  id="Restorestu" />
             </div>
             <table class="table table-hover">
                 <tr>
-                    <th width="4
-                    5" >
+                    <th width="45" >
                         
+                    </th>
+                    <th width="100">
+                        删除时间
                     </th>
                     <th width="100">
                        培训期数 
@@ -91,10 +72,11 @@
                     <td >
                         <input type="Checkbox" isflag="0" class='onecheck' dataid="<?php echo $v['id'];  ?> ">
                     </td>
-                    <td >
-                        <strong>
-                            <?php echo $v['period'];  ?>
-                        </strong>
+                    <td class='rfont'>
+                       <?php echo $v['recycletime'];  ?>
+                    </td>
+                     <td >
+                       <?php echo $v['period'];  ?>
                     </td>
                     <td >
                        <?php echo $v['name'];  ?>                 
@@ -117,26 +99,22 @@
                        <?php echo $v['class'];  ?>
                     </td>
                     <td >
-                        <a href="">详情</a>
+                        <a href="" class='gfont'>详情</a>
                         &nbsp;&nbsp;||&nbsp;&nbsp;
-                        <a class="rfont" href="<?php echo site_url().'/AddStudents/delonedata?id='.$v['id']; ?>">删除</a>
+                        <a href="<?php echo site_url().'/AddStudents/restoreonedata?id='.$v['id']; ?>" class='bfont'>还原</a>
                     </td>
                     </tr>
                 <?php endforeach ?>
                 
             </table>
-        </div>
-        <div class="panel-foot text-center">
+             <div class="panel-foot text-center">
                 <?php echo $page; ?>
+            </div>
         </div>
     </div>
-    <!-- 隐藏域进行隐藏对应的Form操作 -->
-    <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/AddStudents/addAlls'; ?>" id="myupFormFile">
-        <input type='file' name='Excel' id='myUpFile'>
-    </form>
-    <!-- 进行批量删除的操作 -->
-    <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/AddStudents/delmores'; ?>" id="mydelData">
-        <input type='text' name='ids' id='dataids'>
+    <!-- 进行批量还原的操作 -->
+    <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/AddStudents/restore'; ?>" id="myrestoreData">
+        <input type='text' name='restoreids' id='restoreids'>
     </form>
 
 </body>

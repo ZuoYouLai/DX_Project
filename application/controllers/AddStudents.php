@@ -6,6 +6,8 @@ class AddStudents extends My_Controller {
 	{
 		parent::__construct();
 		$this->load->model('AddStudentModel','addstumodel');
+		//进行分页的处理
+		
 		//导入对应的phpexcel库
 		$this->load->library('PHPExcel');
 		$this->load->library('PHPExcel/IOFactory');
@@ -13,8 +15,42 @@ class AddStudents extends My_Controller {
 
 	public function index()
 	{
-		//查出了全部的数据
-		$alldata['newuserinfos']=$this->addstumodel->getAllData();
+		//获取的是培训期数
+		$getperiod=$this->input->get('period');
+		// p($getperiod);
+		// p($getperiod=='');
+		// die();
+		//载入分页类
+		$this->load->library('Page');
+		$page=new Page();
+		//把对应的参数加载到对应的分页类内
+		$pageIndex=$this->input->get('page')?$this->input->get('page'):1;
+		//设置的页码
+		$pageSize=4;
+		$beiginIndex=$pageSize*($pageIndex-1);
+		if ($getperiod=='') {
+			//查出了全部的数据
+			$data=$this->addstumodel->getAllData();
+			$totalCount=count($data);
+			// 没有培训期数
+			$alldata['newuserinfos']=$this->addstumodel->getAllLimitData($pageSize,$beiginIndex);
+			$str_page=$page->create($pageIndex, $pageSize, $totalCount, array(), array());
+		}else{
+			// 具有培训期数的总数
+			$Periddata=$this->addstumodel->getAllTotalDataPerid($getperiod);
+			$totalCount=count($Periddata);
+			// 具有培训期数
+			$alldata['newuserinfos']=$this->addstumodel->getAllLimitDataPerid($pageSize,$beiginIndex,$getperiod);
+			$alldata['period']=$getperiod;
+			$str_page=$page->create($pageIndex, $pageSize, $totalCount, array('period'), array($getperiod));
+		}
+		// p($beiginIndex);
+		// p($pageSize);
+		// p($alldata['newuserinfos']);die;
+		//产生对应页数的链接
+		$alldata['page']=$str_page;
+		$alldata['group']=$this->addstumodel->getGroup();
+		// p($alldata['group']);die;
 		$this->load->view('AddStudent/list',$alldata);
 	}
 
@@ -91,6 +127,123 @@ class AddStudents extends My_Controller {
 
 
 	}
+
+
+
+
+	/**
+	 * 传入id进行进行修改对应数据的状态
+	 */
+	public function delmores()
+	{
+		$data=$this->input->post('ids');
+		$status= array(
+			'status' => 0,
+			'recycletime'=>date('y-m-d',time())
+			);
+		// 分割字符串获取对应的id值
+		$arrids=explode(",",$data);
+		foreach ($arrids as $key => $value) {
+			// p($value);
+			$this->addstumodel->delmores($status,$value);
+		}
+		success('AddStudents/index','成功删除'.count($arrids).'条数据成功....');
+		
+		
+	}
+
+	//删除一条数据
+	public function delonedata()
+	{
+		$data=$this->input->get('id');
+		// p($data);
+		$status= array(
+			'status' => 0,
+			'recycletime'=>date('y-m-d',time())
+			);
+		$this->addstumodel->delmores($status,$data);
+		$this->index();
+
+	}
+
+
+
+
+
+	//回收站
+	public function recycle()
+	{
+		
+		// //查出了全部的数据
+		// $alldata['newuserinfos']=$this->addstumodel->recycle();
+		// $this->load->view('AddStudent/recycle_list',$alldata);
+		//查出了全部的数据
+		$data=$this->addstumodel->recycle();
+		$totalCount=count($data);
+		//载入分页类
+		$this->load->library('Page');
+		//设置的页码
+		$pageSize=4;
+		//把对应的参数加载到对应的分页类内
+		$pageIndex=$this->input->get('page')?$this->input->get('page'):1;
+		$beiginIndex=$pageSize*($pageIndex-1);
+		$page=new Page();
+		$str_page=$page->create($pageIndex, $pageSize, $totalCount, array(), array());
+		$alldata['newuserinfos']=$this->addstumodel->recycleLimitData($pageSize,$beiginIndex);
+		$alldata['page']=$str_page;
+		// p($beiginIndex);
+		// p($pageSize);
+		// p($alldata['newuserinfos']);die;
+		$this->load->view('AddStudent/recycle_list',$alldata);
+	}
+
+
+	//回收站 还原
+	public function restore()
+	{
+		$data=$this->input->post('restoreids');
+		$status= array(
+			'status' => 2,
+			'recycletime'=>''
+			);
+		// 分割字符串获取对应的id值
+		$arrids=explode(",",$data);
+		foreach ($arrids as $key => $value) {
+			// p($value);
+			$this->addstumodel->delmores($status,$value);
+		}
+		success('AddStudents/recycle','成功还原'.count($arrids).'条数据....');
+	}
+
+	//单条数据进行还原
+	public function restoreonedata()
+	{
+		$data=$this->input->get('id');
+		// p($data);
+		$status= array(
+			'status' => 2,
+			'recycletime'=>''
+			);
+		$this->addstumodel->delmores($status,$data);
+		// success('AddStudents/recycle','成功还原1条数据....');
+		$this->recycle();
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//名字进行赋值
 	function toNameforArray($arr)
