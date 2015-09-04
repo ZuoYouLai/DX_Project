@@ -45,7 +45,15 @@ INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('BaiD
 三级列表:
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('index','添加学生',1,1,95,3,1,0);
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('recycle','回收站',1,1,95,3,1,0);
+
+
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('index','座位管理',1,1,97,3,1,0);
+
+
+
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lesssion','上课安排',1,1,97,3,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examManger','考试安排',1,1,97,3,1,0);
+
 
 
 
@@ -81,14 +89,15 @@ CREATE TABLE IF NOT EXISTS `dx_classroom` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `roomname` varchar(500) DEFAULT NULL COMMENT '教室名称',
   `roomtime` varchar(50) DEFAULT NULL COMMENT '教室的时间',
+  `apartment` varchar(50) DEFAULT NULL COMMENT '教室的栋数',
   `roomsize` int(10) DEFAULT NULL COMMENT '教室的规格[存放多少座]',
   `manager` varchar(500) DEFAULT NULL COMMENT '教室管理者',
-  `flag` varchar(100)  DEFAULT '1' COMMENT 'flag为1则为上课教室 2为考试教室[默认是教室]',
-  PRIMARY KEY (`id`),
+  `flag` varchar(100)  DEFAULT '教室' COMMENT 'flag上课教室 考试教室[默认是教室]',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='上课与教室表' AUTO_INCREMENT=1 ;
 
 
-
+// roomname  roomtime apartment  roomsize manager  flag
 
 
 存放教室的具体信息表：
@@ -97,9 +106,19 @@ CREATE TABLE IF NOT EXISTS `dx_classroomMangerInfo` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
   `roomname` varchar(500) DEFAULT NULL COMMENT '教室名称',
   `roomtime` varchar(50) DEFAULT NULL COMMENT '使用时间',
+   `apartment` varchar(50) DEFAULT NULL COMMENT '教室的栋数',
   `roomsize` int(10) DEFAULT NULL COMMENT '教室的规格[存放多少座]',
   `manager` varchar(500) DEFAULT NULL COMMENT '教室管理者',
-  `flag` varchar(100)  DEFAULT '1' COMMENT 'flag为1则为上课教室 2为考试教室[默认是教室]',
+  `flag` varchar(100)  DEFAULT '教室' COMMENT 'flag则为上课教室 否则为考试教室[默认是教室]',
   `managerContent` text  DEFAULT NULL COMMENT '具体分配情况',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='上课与教室详情分配表' AUTO_INCREMENT=1 ;
+
+
+
+
+这个格式是通吃2种Excel的格式:
+$objReader=IOFactory::createReaderForFile($targetfile);
+
+
+以下就做不到了，只支持一种格式

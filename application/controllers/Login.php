@@ -33,6 +33,7 @@ class Login extends CI_Controller {
 						//更新登录状态
 						$this->UserModel->editUser(array('last_login_time'=>now(),'last_login_ip'=>$this->input->ip_address()),array('id'=>$result['id']));
 						$this->session->set_userdata('user', $result);//保存登录状态
+						// $this->session->set_userdata('myrole', "超级管理员");//保存登录状态
 						show_error('index.php/Index/index',500,'提示信息：登录成功！');
 					}else{
 						show_error('index.php/Login/login',500,'提示信息：您已被禁止登录，请联系超级管理员！');

@@ -1,5 +1,5 @@
 <?php
-	defined('BASEPATH') OR exit('No direct script access allowed');
+    defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn">
@@ -8,27 +8,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="renderer" content="webkit" />
-    <title>学生添加模块</title>
+    <title>考试管理模块</title>
     <base href="<?php echo base_url(); ?>" />
     <link type="text/css" rel="stylesheet" href="statics/css/pintuer.css" />
     <link type="text/css" rel="stylesheet" href="statics/css/admin.css" />
     <script type="text/javascript" src="statics/js/jquery.js"></script>
-    <script type="text/javascript" src="statics/js/roomManger.js"></script>
+    <script type="text/javascript" src="statics/js/examManger.js"></script>
 </head>
 <body>
     <div class="admin">
         <div class="panel admin-panel">
             <div class="panel-head">
-                <strong>学生座位安排</strong></div>
+                <strong>学生考试座位安排规格</strong></div>
             <div class="padding border-bottom">
                 <input type="button" class="button button-small border-green" value="添加教室" onclick="location.href='index.php/CroomManger/add';" />
-                <input type="button" id='addAllstu' class="button button-small border-yellow" value="选择EXCEL" />
+                <input type="button" id='addAllstu' class="button button-small border-yellow" value="教室座位规格导入Excel说明" />
             </div>
             <table class="table table-hover">
                 <tr>
-                    <th width="4
-                    5" >
-                    </th>
                     <th width="100">
                        教室名称 
                     </th>
@@ -42,14 +39,11 @@
                         类型
                     </th>
                     <th width="150">
-                      &nbsp; &nbsp; &nbsp; 操作
+                        &ensp;&ensp;&ensp;&ensp;操作
                     </th>
                 </tr>
                 <?php foreach($newuserinfos as $v):?>
                     <tr>
-                    <td >
-                        <input type="Checkbox" isflag="0" class='onecheck' dataid="<?php echo $v['id'];  ?> ">
-                    </td>
                     <td >
                         <strong>
                             <?php echo $v['roomname'];  ?>
@@ -64,9 +58,8 @@
                         <?php echo $v['flag'];  ?>
                     </td>
                     <td >
-                        <a href="">详情</a>
-                        &nbsp;&nbsp;||&nbsp;&nbsp;
-                        <a class="rfont" href="<?php echo site_url().'/CroomManger/delonedata?id='.$v['id']; ?>">删除</a>
+                        <input type="button" id='checkExcel' class="button button-small border-black" value="选择EXCEL" />
+                        <input type="button" id='okExcel' class="button button-small border-blue hideblock" value="确认座位安排" idvalue="<?php echo $v['id'];  ?>"/>
                     </td>
                     </tr>
                 <?php endforeach ?>
@@ -75,6 +68,9 @@
 
         </div>
     </div>
-   
+    <!-- 隐藏域进行隐藏对应的Form操作 -->
+    <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/CroomManger/ExamoneRoomExcel'; ?>" id="myupFormFile">
+        <input type='file' name='Excel' id='myUpFile'>
+    </form>
 </body>
 </html>

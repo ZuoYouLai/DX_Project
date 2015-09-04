@@ -84,7 +84,8 @@ class AddStudents extends My_Controller {
 		$targetfile='./uploads/'.$info['file_name'];
 		//生成对应的格式
 		//需要注意的是,这里的excel文件要对应好不同的格式
-		$objReader=IOFactory::createReader('Excel2007');
+		// $objReader=IOFactory::createReader('Excel2007');
+		$objReader=IOFactory::createReaderForFile($targetfile);
 		//读取整个execl文件生成excel的object
 		$objPHPExcel=$objReader->load($targetfile);
 		//获取总的sheet数
