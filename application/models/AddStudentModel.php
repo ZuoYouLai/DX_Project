@@ -77,7 +77,6 @@ class AddStudentModel extends CI_Model {
 	}
 
 	// 总数 -->培训总数
-
 	public function getAllTotalDataPerid($period)
 	{
 		$data = $this->db->where(array('status'=>2,'period'=>$period))->get('dx_stu_login')->result_array();

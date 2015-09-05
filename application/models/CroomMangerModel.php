@@ -52,6 +52,18 @@ class CroomMangerModel extends CI_Model {
 		$this->db->insert('dx_classroomMangerInfo', $data);
 	}
 
+	//查找分好考试,教室规格的数据
+	function ClassRoomMangerDicData($name){
+		$data = $this->db->where(array('flag'=>$name))->get('dx_classroomMangerInfo')->result_array();
+		return $data;
+	}
+
+	//查找分好考试,教室规格的数据,单条数据
+	function ClassRoomMangerDicDataAndId($name,$id){
+		$data = $this->db->where(array('flag'=>$name,'id'=>$id))->get('dx_classroomMangerInfo')->result_array();
+		return $data;
+	}
+
 
 	// 找上课教室数据
 	public function getLessionData()

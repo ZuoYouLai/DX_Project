@@ -54,6 +54,9 @@ INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('inde
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lesssion','上课安排',1,1,97,3,1,0);
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examManger','考试安排',1,1,97,3,1,0);
 
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lesssionDistribution','上课分配',1,1,97,3,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examrDistribution','考试分配',1,1,97,3,1,0);
+
 
 
 
@@ -108,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `dx_classroomMangerInfo` (
   `roomtime` varchar(50) DEFAULT NULL COMMENT '使用时间',
    `apartment` varchar(50) DEFAULT NULL COMMENT '教室的栋数',
   `roomsize` int(10) DEFAULT NULL COMMENT '教室的规格[存放多少座]',
+  `roomrealsize` int(10) DEFAULT NULL COMMENT '实际分配的规格',
   `manager` varchar(500) DEFAULT NULL COMMENT '教室管理者',
   `flag` varchar(100)  DEFAULT '教室' COMMENT 'flag则为上课教室 否则为考试教室[默认是教室]',
   `managerContent` text  DEFAULT NULL COMMENT '具体分配情况',

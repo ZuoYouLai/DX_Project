@@ -6,6 +6,7 @@ class CroomManger extends My_Controller {
 	{
 		parent::__construct();
 		$this->load->model('CroomMangerModel','croommanger');
+		$this->load->model('AddStudentModel','addstumodel');
 		//导入对应的phpexcel库
 		$this->load->library('PHPExcel');
 		$this->load->library('PHPExcel/IOFactory');
@@ -70,24 +71,91 @@ class CroomManger extends My_Controller {
 		// p($targetfile);die();
 		$obj=$this->getExcelObject($targetfile,1);
 		$index=$this->getstateIndex($obj,'排位');
-		// p(count($index));
-		// p($index['index']);
 		if (count($index)>1) {
 			$data=$this->doExcelObj($index['index'],$obj);
 			// 查出对应id的数据
 			$sdata=$this->croommanger->getExamDataToId($id);
 			$sdata[0]['managerContent']=$data;
+			$sdata[0]['roomrealsize']=$index['realsize'];
 			$sdata[0]['id']='';
 			$this->croommanger->insertClassRoomMangerInfoData($sdata[0]);
 			success('CroomManger/index','成功插入'.count($sdata).'条数据成功....');
-
-
 		}else{
 			
 		}
 		
 		
 	}
+
+
+
+	
+	// 上课教室分配
+	public function lesssionDistribution()
+	{
+		$this->index();
+	}
+
+
+	// 考试教室分配
+	public function examrDistribution()
+	{
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicData('考试');
+		$this->load->view('CroomManger/examDlist',$alldata);
+	}
+
+	
+
+	// 考试教室分配页
+	public function examrDistriPage()
+	{
+		$id=$this->input->get('id');
+		// p($id);die;
+		$alldata['group']=$this->addstumodel->getGroup();
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId('考试',$id);
+		$alldata['managerContent']=$alldata['newuserinfos'][0]['managerContent'];
+		$alldata['roomrealsize']=$alldata['newuserinfos'][0]['roomrealsize'];
+		$alldata['id']=$alldata['newuserinfos'][0]['id'];
+		$this->load->view('CroomManger/distadd',$alldata);
+	}
+
+
+	// 具体培训期数对应的人数
+	public function getPxNum()
+	{
+		$id=$this->input->post('id');
+		$arr=$this->addstumodel->getAllTotalDataPerid($id);
+		echo count($arr);
+	}
+
+
+	// 返回具体的人数的具体的详情
+	public function getPxInfo()
+	{
+		$id=$this->input->post('id');
+		$arr=$this->addstumodel->getAllTotalDataPerid($id);
+		$name='';
+		$stuid='';
+		foreach ($arr as $key => $value) {
+			// if ($stuid) {
+			// 	$stuid=$value['user_name'];
+			// }else{
+				$stuid=$stuid.','.$value['user_name'];
+			// }
+
+			// if ($name) {
+			// 	$name=$value['name'];
+			// }else{
+				$name=$name.','.$value['name'];
+			// }
+			
+		}
+		$content=$name.'#####'.$stuid;
+		echo $content;
+	}
+
+
+
 
 
 
@@ -102,7 +170,7 @@ class CroomManger extends My_Controller {
 		{
 			if ($obj[0][$i]==$content) {
 				// $flg='yes';
-				$flg = array('flg' =>'yes' , 'index'=>$i);
+				$flg = array('flg' =>'yes' , 'index'=>$i,'realsize'=>($length-1));
 				break;
 			}
 		}
