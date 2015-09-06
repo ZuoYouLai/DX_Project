@@ -113,6 +113,12 @@ class AddStudents extends My_Controller {
 			foreach ($importdata as $key => $value) {
 				if ($z==0) {
 					$firstname=$this->toNameforArray($value);
+					$inportsize=$this->IstoMyExcelField($firstname);
+					// 需要满足最起码的8字段值
+					if ($inportsize!=8) {
+						success('AddStudents/index','导入失败,你导入数据不符合规范...');
+						break;
+					}
 				}else{
 					$newinfoarr=$this->newarraydata($firstname,$value);
 					//生成新的数组
@@ -121,14 +127,62 @@ class AddStudents extends My_Controller {
 				$z++;
 			}
 		}
-		// p($alldata);
 		//批量导入问题
+		// 1.校验用户是否存在
+		$mynewUsers=$this->IsHaveUser($alldata);
+		$sumsize=count($alldata);
+		$mynewUserssize=count($mynewUsers);
+		$num=$sumsize-$mynewUserssize;
+		// 2.导入过滤的数据
 		$this->addstumodel->addAllFromOneExcel($alldata);
-		success('AddStudents/index','批量导入'.count($alldata).'条数据成功....');
+		success('AddStudents/index','总共导入数据'.$sumsize.'条,成功导入'.$mynewUserssize.'条,失败'.$num.'条[原因:此用户已存在]');
 
 
 	}
 
+	// 校验用户是否存在
+	public function IsHaveUser($alldata)
+	{
+		$newUsers=array();
+		foreach ($alldata as $key => $value) {
+			$userName=$value['user_name'];
+			$len=$this->addstumodel->getIsoneUser($userName);
+			if (!$len) {
+				array_push($newUsers, $value);
+			}
+		}
+		return $newUsers;
+	}
+
+
+	// 导入的Excle是否符合我需要的字段
+	public function IstoMyExcelField($firstname)
+	{
+		$size=0;
+		foreach ($firstname as $key => $value) {
+			switch ($value) {
+				case 'name':$size=$size+1;
+					break;
+			    case 'school_zone':$size=$size+1;
+					break;
+				case 'belong':$size=$size+1;
+					break;
+				case 'specialty':$size=$size+1;
+					break;
+				case 'ngrade':$size=$size+1;
+					break;
+				case 'period':$size=$size+1;
+					break;
+				case 'user_name':$size=$size+1;
+					break;
+				case 'class':$size=$size+1;
+					break;
+				default:
+					break;
+			}
+		}
+		return $size;
+	}
 
 
 

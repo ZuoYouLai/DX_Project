@@ -82,5 +82,13 @@ class AddStudentModel extends CI_Model {
 		$data = $this->db->where(array('status'=>2,'period'=>$period))->get('dx_stu_login')->result_array();
 		return $data;
 	}
+
+
+	// 判断是否此用户是否存在  根据学号进行判断校验  大于0则存在 0为不存在
+	public function getIsoneUser($xnum)
+	{
+		$data = $this->db->where(array('user_name'=>$xnum))->get('dx_stu_login')->result_array();
+		return count($data);
+	}
 	
 }

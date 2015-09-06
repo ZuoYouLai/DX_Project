@@ -36,10 +36,9 @@
                 </select>
                 <input type="button" id='FPbtn' class="button button-small border-yellow mr35" value="一键分配" />
                  
-                <input type="button" id='getFP' class="button button-small border-yellow mr35 hideblock" value="查看分配情况" />
-                
                 <input type="button" id='downExcle' class="button button-small border-yellow mr35 hideblock" value="下载Excle" />
-
+                <input type="button" id='saveData' class="button button-small border-blue mr35 hideblock" value="保存" />
+                <span class="hideblock" id="allbigdat"></span>
 
             </div>  
              <div class="padding border-bottom">
@@ -102,6 +101,27 @@
                     </tr>
                 <?php endforeach ?>
             </table>
+<hr>
+             <table class="table table-hover hideblock"  id='FPtable'>
+                <thead>
+                <tr>
+                    <th width="100">
+                       座位 
+                    </th>
+                    <th width="120">
+                       学号
+                    </th>
+                    <th width="120">
+                      名字
+                    </th> 
+                </tr>
+                </thead>
+                <tbody id="targetTbody">
+                    
+                </tbody>
+            </table>
+
+
             </div>
             
       

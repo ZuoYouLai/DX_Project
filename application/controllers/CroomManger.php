@@ -136,18 +136,16 @@ class CroomManger extends My_Controller {
 		$arr=$this->addstumodel->getAllTotalDataPerid($id);
 		$name='';
 		$stuid='';
+		$size=0;
 		foreach ($arr as $key => $value) {
-			// if ($stuid) {
-			// 	$stuid=$value['user_name'];
-			// }else{
-				$stuid=$stuid.','.$value['user_name'];
-			// }
-
-			// if ($name) {
-			// 	$name=$value['name'];
-			// }else{
-				$name=$name.','.$value['name'];
-			// }
+			if ($size) {
+				$name=$value['name'].','.$name;
+				$stuid=$value['user_name'].','.$stuid;
+			}else{
+				$name=$value['name'];
+				$stuid=$value['user_name'];
+			}
+			$size++;
 			
 		}
 		$content=$name.'#####'.$stuid;
