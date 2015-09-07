@@ -117,14 +117,18 @@
                 </tr>
                 </thead>
                 <tbody id="targetTbody">
-                    
                 </tbody>
             </table>
-
-
             </div>
-            
-      
     </div>
+
+    <!-- 隐藏域进行隐藏对应的Form操作 -->
+    <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/CroomManger/saveOneData'; ?>" id="myupFormFile">
+        <input type="text" id='bigdata' name='bigdata'>
+        <input type="text" id='classid' name='classid'>
+        <input type="text" id='stuperid' name='stuperid'>
+        <input type="text" id='Lrealsize' name='realsize'>
+        <input type="text"  name='roomname' value=" <?php echo $roomname;  ?>">
+    </form>
 </body>
 </html>

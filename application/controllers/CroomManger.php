@@ -7,6 +7,7 @@ class CroomManger extends My_Controller {
 		parent::__construct();
 		$this->load->model('CroomMangerModel','croommanger');
 		$this->load->model('AddStudentModel','addstumodel');
+		$this->load->model('examAllocationModel','examAllcation');
 		//导入对应的phpexcel库
 		$this->load->library('PHPExcel');
 		$this->load->library('PHPExcel/IOFactory');
@@ -87,9 +88,6 @@ class CroomManger extends My_Controller {
 		
 	}
 
-
-
-	
 	// 上课教室分配
 	public function lesssionDistribution()
 	{
@@ -106,6 +104,8 @@ class CroomManger extends My_Controller {
 
 	
 
+
+
 	// 考试教室分配页
 	public function examrDistriPage()
 	{
@@ -115,6 +115,7 @@ class CroomManger extends My_Controller {
 		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId('考试',$id);
 		$alldata['managerContent']=$alldata['newuserinfos'][0]['managerContent'];
 		$alldata['roomrealsize']=$alldata['newuserinfos'][0]['roomrealsize'];
+		$alldata['roomname']=$alldata['newuserinfos'][0]['roomname'];
 		$alldata['id']=$alldata['newuserinfos'][0]['id'];
 		$this->load->view('CroomManger/distadd',$alldata);
 	}
@@ -151,6 +152,40 @@ class CroomManger extends My_Controller {
 		$content=$name.'#####'.$stuid;
 		echo $content;
 	}
+
+	// 保存分配好的教室的信息
+	public function saveOneData()
+	{
+		$bigdata=$this->input->post('bigdata');
+		$classid=$this->input->post('classid');
+		$stuperid=$this->input->post('stuperid');
+		$realsize=$this->input->post('realsize');
+		$roomname=$this->input->post('roomname');
+		$perName='第'.$stuperid.'期';
+		$data = array(
+						'roomId' => $classid, 
+						'stuId' => $stuperid, 
+						'realsize' => $realsize, 
+						'FpRoomname' => $roomname, 
+						'perName' => $perName, 
+						'parttime' => date('y-m-d',time()), 
+						'bigData' => $bigdata
+					 );
+		
+		$this->examAllcation->insertAData($data);
+		success('Allocation/index','ok...');
+	}
+
+
+	// 分配好的页面
+	// examResult
+	public function examResult()
+	{
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoom();
+		// p($alldata);die();
+		$this->load->view('CroomManger/examok',$alldata);
+	}
+
 
 
 

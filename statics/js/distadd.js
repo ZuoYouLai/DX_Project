@@ -14,7 +14,19 @@ $(function(){
 		$FPtable=$('#FPtable'),
 		$downExcle=$('#downExcle'),
 		$saveData=$('#saveData'),
+
+		// 保存需要提交的3个字段
+		$bigdata=$('#bigdata'),
+		$classid=$('#classid'),
+		$stuperid=$('#stuperid'),
+		$Lrealsize=$('#Lrealsize'),
+		$myupFormFile=$('#myupFormFile'),
+
+
+		// html需要提交的字段
 		$targetTbody=$('#targetTbody');
+
+
 
 	$myselect.change(function(){
 		var content=$(this).val(),
@@ -135,11 +147,9 @@ $(function(){
             		$saveData.show();
             		// alert(JSON.stringify(alldata));
             		$('#allbigdat').text(JSON.stringify(alldata));
-            		var co=$('#allbigdat').text();
-            		debugger;
-            		alert(JSON.parse(co));
-
-
+            		
+            		// debugger;
+            		// alert(JSON.parse(co));
 				}else{
 
 				}
@@ -149,9 +159,36 @@ $(function(){
 				alert('服务器报错...');
 			}
 		    });
-
 		}
 
+
+
+		// 进行保存全部对象字符
+		$saveData.click(function(){
+			var co=$('#allbigdat').text().trim(),
+				stuSpanNum=$targetspanNum.text().trim(),
+				Lrealsize=JSON.parse(co).length,
+				targetrmid=$targetrmid.text().trim();
+	        $bigdata.val(co);
+	        $classid.val(targetrmid);
+	        $Lrealsize.val(Lrealsize);
+	        $stuperid.val(stuSpanNum);
+	        // 表单提交
+	        $myupFormFile.submit();
+			// //提交数据
+			// $.ajax({
+			// url:'index.php/CroomManger/saveOneData',
+			// data:{data:co},
+			// type:'POST',
+			// success:function(data,status){
+			// 	alert(data);
+			// },
+			// error:function(){
+			// 	alert('服务器报错...');
+			// }
+		 	// });
+
+		});
 		
 
 

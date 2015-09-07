@@ -56,6 +56,7 @@ INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('exam
 
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lesssionDistribution','上课分配',1,1,97,3,1,0);
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examrDistribution','考试分配',1,1,97,3,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examResult','考试分配结果',1,1,97,3,1,0);
 
 
 
@@ -119,10 +120,52 @@ CREATE TABLE IF NOT EXISTS `dx_classroomMangerInfo` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='上课与教室详情分配表' AUTO_INCREMENT=1 ;
 
 
-
+以下就做不到了，只支持一种格式
 
 这个格式是通吃2种Excel的格式:
 $objReader=IOFactory::createReaderForFile($targetfile);
 
 
-以下就做不到了，只支持一种格式
+
+
+// 创建一个课室的具体的分配内容表单
+DROP TABLE IF EXISTS `dx_examAllocation`;
+CREATE TABLE IF NOT EXISTS `dx_examAllocation` (
+  `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '自增的id',
+  `roomId` varchar(500) DEFAULT NULL COMMENT '教室id',
+  `FpRoomname` varchar(500) DEFAULT NULL COMMENT '教室名称',
+  `stuId` varchar(50) DEFAULT NULL COMMENT '期数id',
+  `perName` varchar(50) DEFAULT NULL COMMENT '期数名称',
+   `parttime` date DEFAULT NULL COMMENT '分配时间',
+   `parttimeInfo` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '具体分配时间',
+  `allocationcomment` varchar(500) DEFAULT NULL COMMENT '分配说明',
+  `aInstru` varchar(500) DEFAULT NULL COMMENT '额外字段',
+  `realsize` varchar(50) DEFAULT NULL COMMENT '实际座拍人数',
+  `bigData` text  DEFAULT NULL COMMENT '具体分配情况',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='课室的具体的分配内容' AUTO_INCREMENT=1 ;
+
+
+
+
+// 一次性进行关联3张表数据关联
+select * from dx_examAllocation ea left join dx_classroomMangerInfo cm on ea.roomId = cm.id
+select * from dx_examAllocation ea left join dx_classroomMangerInfo cm on ea.roomId = cm.id where ea.id=1
+
+SELECT * FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc
+
+
+
+SELECT * FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id where ea.id=1 ORDER BY parttimeInfo desc
+
+
+
+
+
+
+使用php自带的函数trim()
+
+<?php
+$str="aaaa";
+echo trim($str);
+?>
