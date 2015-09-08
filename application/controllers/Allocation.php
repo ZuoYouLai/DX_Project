@@ -19,105 +19,44 @@ class Allocation extends My_Controller {
 		$this->load->view('CroomManger/examok',$alldata);
 	}
 
+
+	// 分配座位的详细信息
 	public function getInfo()
 	{
 		$id=$this->input->get('id');
+		$data=$this->examAllcation->OneDataFromID($id);
+		$target=$data[0]['bigData'];
+		$alldata['newuserinfos']=json_decode($target,true);
+		$alldata['fpid']=$id;
 		$this->load->view('CroomManger/OnePage',$alldata);
 	}
 
+
+	// 删除对应的id的数据
 	public function deleteOne()
 	{
 		$id=$this->input->get('id');
-		$this->load->view('CroomManger/OnePage',$alldata);
+		$this->examAllcation->deleteoneData($id);
+		$this->index();
 	}
+
+
 
 	public function downExcel()
 	{
 		$id=$this->input->get('id');
 		$data=$this->examAllcation->OneDataFromID($id);
+		p($data);die();
 		$fsize=count($data[0]);
 		if ($fsize) {
 			$target=$data[0]['bigData'];
-			// $time=$data[0]['parttime'];
-			// $perName=$data[0]['perName'];
-			// $FpRoomname=$data[0]['FpRoomname'];
-			// $title=$time.' '.$perName.'学生';
-			// $ExcelTitle=$FpRoomname.' '.$time.' '.$perName.'学生';
-			// $alld = array(
-			// 			'num' => 11, 
-			// 			'idname' => '34434', 
-			// 			'username' => 'ddd4'
-			// 			);
-			
+			$time=$data[0]['parttime'];
+			$perName=$data[0]['perName'];
+			$FpRoomname=$data[0]['FpRoomname'];
+			$title=$time.' '.$perName.'学生';
+			$ExcelTitle=$FpRoomname.' '.$time.' '.$perName.'学生';
 			$alldata=json_decode($target,true);
-			// $alldata1=json_decode($target,true);
-			// $alldata = array($alldata1);
-			// foreach ($obj as $key => $value) {
-			// 	p($value);				
-				// p($alldata);
-				// die();				
-			// 	p($value['num']);				
-			// 	p(trim($value['username']));				
-			// 	// $j++;
-			// }
-			// // $obj=json_decode($target);
-			// // p($obj);
-			// die();
-			// $this->ExcelMethod($test,3,$title,$ExcelTitle);
-
-
-			$objPHPExcel=new PHPExcel();
-		//创建了3个工作簿
-		for ($i=1; $i<=3; $i++) { 
-			// 新建的objPHPExcel对象就已经新建的sheet对象
-			if ($i >1) {
-				//创建新的内置表
-				$objPHPExcel->createSheet();
-			}
-			//把新创建的sheet设定为当前活动sheet
-			$objPHPExcel->setActiveSheetIndex($i-1);
-			//获取当前活动sheet
-			$objSheet=$objPHPExcel->getActiveSheet();
-			// p($objSheet);die();
-			//给当前活动sheet起个名称
-			$objSheet->setTitle('第'.$i.'个工作簿');
-			//位置居中
-			$objSheet->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//设置excel文件默认水平垂直方向居中
-			//字体的设置
-			//$objSheet->getDefaultStyle()->getFont()->setSize(14)->setName("微软雅黑");//设置默认字体大小和格式
-			//填充数据 [固定的数据]
-			$objSheet->setCellValue("A1","姓名")->setCellValue("B1","校区")->setCellValue("C1","学院")->setCellValue("D1","专业")->setCellValue("E1","年级")->setCellValue("F1","班级")->setCellValue("G1","分组");
-			$j=2;
-			foreach ($alldata as $key => $value) {
-				//插入具体的数据
-				// $objSheet->setCellValue("A".$j,$value['user_name'])->setCellValue("B".$j,$value['school_zone'])->setCellValue("C".$j,$value['belong'])->setCellValue("D".$j,$value['specialty'])->setCellValue("E".$j,$value['ngrade'])->setCellValue("F".$j,$value['class'])->setCellValue("G".$j,$value['group']);
-				$objSheet->setCellValue("A".$j,$value['num'])->setCellValue("B".$j,$value['idname'])->setCellValue("C".$j,$value['idname'])->setCellValue("D".$j,$value['idname'])->setCellValue("E".$j,$value['idname'])->setCellValue("F".$j,$value['idname'])->setCellValue("G".$j,$value['idname']);
-				// p($objSheet);
-				$j++;
-			}
-		}
-
-
-			$objWriter=IOFactory::createWriter($objPHPExcel, 'Excel2007');
-			// p($objWriter);
-			// die();
-			//在controller里面的方法的互相调用
-			$this->browser_export('Excel2007','学生信息表.xlsx');//输出到浏览器
-			$objWriter->save("php://output");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			$this->ExcelMethod($alldata,1,$title,$ExcelTitle);
 		}
 	}
 
@@ -135,6 +74,9 @@ class Allocation extends My_Controller {
 			$objPHPExcel->setActiveSheetIndex($i-1);
 			//获取当前活动sheet
 			$objSheet=$objPHPExcel->getActiveSheet();
+			//set width  
+			$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+
 			// p($objSheet);die();
 			//给当前活动sheet起个名称
 			$objSheet->setTitle($title);
@@ -146,14 +88,16 @@ class Allocation extends My_Controller {
 			$objSheet->setCellValue("A1","序号")->setCellValue("B1","座位")->setCellValue("C1","学号")->setCellValue("D1","姓名");
 			$j=2;
 			foreach ($alldata as $key => $value) {
-				$objSheet->setCellValue("A".$j,'11')->setCellValue("B".$j,$value['num'])->setCellValue("C".$j,$value['idname'])->setCellValue("D".$j,trim($value['username']));
+				$objSheet->setCellValue("A".$j,($j-1))->setCellValue("B".$j,$value['num'])->setCellValue("C".$j,$value['idname'])->setCellValue("D".$j,trim($value['username']));
 				$j++;
 			}
 		}
+			// 困扰我一直的bug在这里 
+			// 由于乱码的问题导致打不开Excel文件
+			ob_end_clean();
 			$objWriter=IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			//在controller里面的方法的互相调用
-			// $this->browser_export('Excel2007',$ExcelTitle.'.xlsx');//输出到浏览器
-			$this->browser_export('Excel2007','11.xlsx');//输出到浏览器
+			$this->browser_export('Excel2007',$ExcelTitle.'.xlsx');//输出到浏览器
 			$objWriter->save("php://output");
 
 	}

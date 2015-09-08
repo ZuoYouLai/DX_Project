@@ -38,9 +38,12 @@
                         学生期数
                     </th>
                     <th width="120">
+                       分配日期
+                    </th>
+                     <th width="220">
                        分配时间
                     </th>
-                    <th width="300">
+                    <th width="200">
                         &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;操作
                     </th>
                 </tr>
@@ -65,6 +68,9 @@
                     </td>
                      <td>
                         <?php echo $v['parttime'];  ?>  
+                     </td>
+                      <td>
+                        <?php echo $v['parttimeInfo'];  ?>  
                      </td>
                     <td >
                         <input type="button" id='checkExcel' class="button button-small border-blue" value="详情"  onclick="location.href='index.php/Allocation/getInfo?id='+<?php echo $v['id'];  ?>" />

@@ -152,6 +152,44 @@ CREATE TABLE IF NOT EXISTS `dx_examAllocation` (
 select * from dx_examAllocation ea left join dx_classroomMangerInfo cm on ea.roomId = cm.id
 select * from dx_examAllocation ea left join dx_classroomMangerInfo cm on ea.roomId = cm.id where ea.id=1
 
+
+
+
+
+
+                    [id] => 1
+                    [roomId] => 1
+                    [FpRoomname] =>  A2-3
+                    [stuId] => 3
+                    [perName] => 第3期
+                    [parttime] => 2015-09-09
+                    [parttimeInfo] => 2015-09-09 00:18:57
+                    [allocationcomment] => 
+                    [aInstru] => 
+                    [realsize] => 13
+                    [bigData] => [{"no":"4aisrGAwWOE7","idname":"11345465482","username":"vd","num":"1"},{"no":"IE2hssvI2cCQ","idname":"114354330382","username":"颇多","num":"3"},{"no":"iGFM8SPbd7i9","idname":"423432543","username":"\r\n\r\n\r\n\r\n收到","num":"5"},{"no":"iPAwAmVsoaiw","idname":"11545654382","username":"普拉达","num":"7"},{"no":"NRRh2tsDcR6B","idname":"112345657","username":"门呃","num":"9"},{"no":"Ocnl8CrA3GMG","idname":"1146362","username":"速度","num":"12"},{"no":"P2XFGdAO49qm","idname":"11123343","username":"李泽","num":"14"},{"no":"t5sYndcMAGO0","idname":"11234365365482","username":"搜罗","num":"17"},{"no":"tWUmYOy64OPh","idname":"11209090382","username":"赖豪达","num":"19"},{"no":"UkCXhRD8BhtL","idname":"1125677787","username":"配送单","num":"23"},{"no":"VrSzgKsLDuim","idname":"14453432","username":"潘老师","num":"25"},{"no":"yqAWK6cqE6Vk","idname":"4354309090382","username":"大帝","num":"29"},{"no":"YWQy8UR0AzEg","idname":"9934u893454","username":"plsd","num":"30"}]
+                    [roomname] => A2-3
+                    [roomtime] => 
+                    [apartment] => A
+                    [roomsize] => 300
+                    [roomrealsize] => 23
+                    [manager] => 
+                    [flag] => 考试
+                    [managerContent] =>   1  3  5  7  9  12  14  17  19  23  25  29  30  31  34  35  36  41  42  45  46  47  48
+
+
+
+
+
+
+
+SELECT ea.id,ea.roomId,ea.bigData,ea.realsize,ea.perName,ea.parttimeInfo,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc
+
+
+
+
+
+
 SELECT * FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc
 
 

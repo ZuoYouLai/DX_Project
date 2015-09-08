@@ -99,7 +99,17 @@ class CroomManger extends My_Controller {
 	public function examrDistribution()
 	{
 		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicData('考试');
+		// p($alldata);die;
 		$this->load->view('CroomManger/examDlist',$alldata);
+	}
+
+	// 分配教室详情
+	public function eroominfo()
+	{
+		$id=$this->input->get('id');
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId('考试',$id);
+		$alldata['flag']=$alldata['newuserinfos'][0]['flag'];
+		$this->load->view('CroomManger/eroomInfo',$alldata);
 	}
 
 	
@@ -173,7 +183,7 @@ class CroomManger extends My_Controller {
 					 );
 		
 		$this->examAllcation->insertAData($data);
-		success('Allocation/index','ok...');
+		success('Allocation/index','分配保存成功!');
 	}
 
 

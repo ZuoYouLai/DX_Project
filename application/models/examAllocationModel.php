@@ -19,7 +19,7 @@ class examAllocationModel extends CI_Model {
 	// left join的关联
 	function leftJoinRoom()
 	{
-		$sql="select * from dx_examAllocation ea left join dx_classroomMangerInfo cm on ea.roomId = cm.id ORDER BY parttimeInfo desc";
+		$sql="SELECT ea.id,ea.roomId,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -28,6 +28,21 @@ class examAllocationModel extends CI_Model {
 	function OneDataFromID($id)
 	{
 		$data = $this->db->where(array('id'=>$id))->get('dx_examAllocation')->result_array();
+		return $data;
+	}
+
+
+	// 删除一条数据
+	function deleteoneData($id)
+	{
+		$this->db->delete('dx_examAllocation', array('id'=>$id));
+	}
+
+
+	// ==
+	function OneDataFromIDdemo()
+	{
+		$data = $this->db->where(array('id'=>1))->get('dx_examAllocation')->result_array();
 		return $data;
 	}
 

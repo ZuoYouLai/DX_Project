@@ -35,8 +35,6 @@
                     <?php endforeach ?>
                 </select>
                 <input type="button" id='FPbtn' class="button button-small border-yellow mr35" value="一键分配" />
-                 
-                <input type="button" id='downExcle' class="button button-small border-yellow mr35 hideblock" value="下载Excle" />
                 <input type="button" id='saveData' class="button button-small border-blue mr35 hideblock" value="保存" />
                 <span class="hideblock" id="allbigdat"></span>
 
