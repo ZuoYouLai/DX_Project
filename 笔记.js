@@ -141,9 +141,14 @@ CREATE TABLE IF NOT EXISTS `dx_examAllocation` (
   `allocationcomment` varchar(500) DEFAULT NULL COMMENT '分配说明',
   `aInstru` varchar(500) DEFAULT NULL COMMENT '额外字段',
   `realsize` varchar(50) DEFAULT NULL COMMENT '实际座拍人数',
+  `fpcondition` varchar(100)  DEFAULT NULL COMMENT '分配情况[1代表是教室人数小于座位数  2代表教室人数大于座位数',
+  `fpuserinfo` varchar(100)  DEFAULT NULL COMMENT '分配情况为2时,剩下的是学生个人今天信息的内容值',
+  `fpuserinfocount` varchar(100)  DEFAULT NULL COMMENT '分配情况为2时,统计人数',
   `bigData` text  DEFAULT NULL COMMENT '具体分配情况',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='课室的具体的分配内容' AUTO_INCREMENT=1 ;
+
+
 
 
 

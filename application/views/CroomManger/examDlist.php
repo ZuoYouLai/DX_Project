@@ -60,7 +60,7 @@
                     </td>
                     <td >
                         <input type="button" id='checkExcel' class="button button-small border-blue" value="分配"  onclick="location.href='index.php/CroomManger/examrDistriPage?id='+<?php echo $v['id'];  ?>" />
-                        <input type="button" id='checkExcel' class="button button-small border-yellow" value="详情"  onclick="location.href='index.php/CroomManger/eroominfo?id='+<?php echo $v['id'];  ?>"/>
+                        <input type="button" id='checkExcel' class="button button-small border-yellow" value="编辑"  onclick="location.href='index.php/CroomManger/eroominfo?id='+<?php echo $v['id'];  ?>"/>
                     </td>
                     </tr>
                 <?php endforeach ?>

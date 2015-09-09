@@ -46,7 +46,7 @@ class Allocation extends My_Controller {
 	{
 		$id=$this->input->get('id');
 		$data=$this->examAllcation->OneDataFromID($id);
-		p($data);die();
+		// p($data);die();
 		$fsize=count($data[0]);
 		if ($fsize) {
 			$target=$data[0]['bigData'];

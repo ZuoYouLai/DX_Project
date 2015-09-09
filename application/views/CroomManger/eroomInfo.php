@@ -24,11 +24,11 @@
             <div class="tab-body">
                 <br />
                 <div class="tab-panel active" id="tab-set">
-                    <form method="post" class="form-x" action="index.php/CroomManger/addOneInfo">
-                    <div style="display:none;">
-	                	<input type="hidden" name="cmd" value="submit" />
-	                </div>
+                    <form method="post" class="form-x" action="index.php/CroomManger/changeOneInfo">
+                    
 	                <?php foreach($newuserinfos as $v):?>
+                    <input type="text" value=" <?php echo $v['id'];  ?>" class="input hide" name="id"  />
+
                     <div class="form-group">
                         <div class="label">
                             <label for="readme">教室名称<b class='rfont'>*</b>:</label></div>
@@ -71,7 +71,7 @@
                         <div class="label">
                             <label for="title">考试座位数:</label></div>
                         <div class="field">
-                            <input type="text" value=" <?php echo $v['roomrealsize'];  ?>" class="input" id="roomsize" name="roomsize" size="1"   />
+                            <input type="text" disabled="disabled" value=" <?php echo $v['roomrealsize'];  ?>" class="input" id="roomsize" name="roomsize" size="1"   />
                         </div>
                     </div>
 		
@@ -79,7 +79,8 @@
                         <div class="label">
                             <label for="title">考试座位情况:</label></div>
                         <div class="field">
-                            <input type="text" value=" <?php echo $v['managerContent'];  ?>" class="input" id="roomsize" name="roomsize" size="1" />
+                            <textarea rows="10" cols="100" id='txtarea'><?php echo trim($v['managerContent']);?></textarea>
+                            <input type="text" value=" <?php echo $v['managerContent'];  ?>" class="input  hide" id="managerContent" name="managerContent" size="1" />
                         </div>
                     </div>
 
@@ -87,7 +88,8 @@
 
 					 <?php endforeach ?>
                     <div class="form-button">
-                        <button class="button bg-main" type="submit" id='FormId'>提交</button></div>
+                        <button class="button bg-main" type="submit" id='FormId'>提交</button>
+                         <input type="button" id='checkExcel' class="button bg-main border-white " value="返回"  onclick="location.href='index.php/CroomManger/examrDistribution'"/></div>
                     </form>
 
                 </div>
@@ -95,4 +97,22 @@
         </div>
     </div>
 </body>
+<script type="text/javascript">
+    $(function(){
+        var $txtarea=$("#txtarea"),
+            textarr=[],
+            arr=[],
+            $managerContent=$("#managerContent");
+        $txtarea.change(function(){
+           textarr=$txtarea.val().split(' ');
+           $.each(textarr,function(){
+                if(this.length) 
+                {
+                    arr.push(this);
+                }
+           });
+           $managerContent.val(arr.join('  '));
+        });
+    });
+</script>
 </html>

@@ -75,6 +75,7 @@ $(function(){
 			data:{id:content},
 			type:'POST',
 			success:function(data,status){
+				debugger;
 				// 清空里面的数据
 				$targetTbody.html('');
 				// alert(data);
@@ -100,7 +101,8 @@ $(function(){
 
 				var arr=[],narr=[],size=$Encontent.length;
 
-				// 总人数 < 实际座位总数
+				debugger;
+				// 总人数 < = 实际座位总数
 				if (targetSNumsize<=realsize) {
 
 					  for (var j=0;j<idnum.length;j++)
@@ -120,13 +122,90 @@ $(function(){
 				               alldata.push(studata);
 				               alldata1.push(studata);
 				       }
+				          $('#fpcondition').val("1");
+				          $('#fpuserinfo').val("");
+				          $('#fpuserinfocount').val("0");
+
 
 				       // 进行排序
 				       // debugger;
 		// 字符：字符的时候sortFunction中的项目不能像数字一样直接相减，需要调用
 		// str1.localeCompare( str2 )方法来作比较，从而满足返回值。以下是多维数组的第1，2列作排序的情况。
 		// 字符串比较
-				       alldata.sort(function(x,y){
+				 //       alldata.sort(function(x,y){
+				 //       		return (x.no==y.no)?(x.no.localeCompare(y.no)):(x.no.localeCompare(y.no)); 
+				 //       });
+
+					// // debugger;
+     //        		var html='';
+     //        		var zz=0;
+     //        		$.each(alldata,function(){
+     //        			 this.num=realContentArr[zz];
+     //        			 var onda='<tr><td>'+this.num+'</td><td>'+this.idname+'</td><td>'+this.username+'</td></tr>';
+     //        			 html+=onda;
+     //        			 zz++;
+     //        		});
+     //        		// 显示table
+     //        		$FPtable.show();
+     //        		$targetTbody.append(html);
+
+     //        		$downExcle.show();
+     //        		$saveData.show();
+     //        		// alert(JSON.stringify(alldata));
+     //        		$('#allbigdat').text(JSON.stringify(alldata));
+            		
+				}else{
+
+					// 提示框处理
+					var r=confirm("你所选班级学生大于可安排的位置,确定继续排位?");
+					if (r==true)
+					{
+						// alert(username);
+					 	 for (var j=0;j<realsize;j++)
+				       {
+				      		   var studata={};
+				               var infotent="";
+				               for (var i = 0; i < 12; i++) 
+					            {
+					                    var rannum=Math.round(Math.random()*(size-1));
+					                    infotent=infotent+$Encontent[rannum];
+					            }
+				               arr.push(infotent);
+				               narr.push(infotent);
+				               studata.no=infotent;
+				               studata.idname=idnum[j];
+				               studata.username=username[j];
+				               alldata.push(studata);
+				               alldata1.push(studata);
+				       }
+
+
+				       // 保存没有被分配的学生的信息
+				       var userInfoarr=[];
+				       for (var j = realsize; j < idnum.length; j++) {
+				       		var userInfo={};
+				       		userInfo.idname=idnum[j];
+				            userInfo.username=username[j];
+				            userInfoarr.push(userInfo);
+
+				       };
+				        $('#fpcondition').val("2");
+				        $('#fpuserinfo').val(JSON.stringify(userInfoarr));
+				        $('#fpuserinfocount').val((idnum.length-realsize));
+
+
+					}
+					else
+					{
+					 	return;
+					}
+				}
+				
+
+		// 字符：字符的时候sortFunction中的项目不能像数字一样直接相减，需要调用
+		// str1.localeCompare( str2 )方法来作比较，从而满足返回值。以下是多维数组的第1，2列作排序的情况。
+		// 字符串比较
+				 alldata.sort(function(x,y){
 				       		return (x.no==y.no)?(x.no.localeCompare(y.no)):(x.no.localeCompare(y.no)); 
 				       });
 
@@ -147,13 +226,9 @@ $(function(){
             		$saveData.show();
             		// alert(JSON.stringify(alldata));
             		$('#allbigdat').text(JSON.stringify(alldata));
-            		
-            		// debugger;
-            		// alert(JSON.parse(co));
-				}else{
+            		$('#bigdata').val(JSON.stringify(alldata));
 
-				}
-				
+
 			},
 			error:function(){
 				alert('服务器报错...');

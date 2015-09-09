@@ -73,20 +73,31 @@ class CroomMangerModel extends CI_Model {
 	}
 
 
-	//limit限制查询
-	public function getAllLimitData($index,$size)
+	//更新教室的分配的情况
+	public function changeOneInfo($id,$data)
 	{
-		$data = $this->db->limit($index,$size)->where(array('status'=>2))->get('dx_stu_login')->result_array();
+		$this->db->update('dx_classroomMangerInfo', $data, array('id'=>$id));
+	}
+
+
+	//一个教室详情
+	public function OneRoomData($id)
+	{
+		$data = $this->db->where(array('id'=>$id))->get('dx_classroom')->result_array();
 		return $data;
 	}
 
-	//查看对应的分组
-	public function getGroup()
+
+	//修改一个教室详情
+	public function changeOneRoomData($id,$data)
 	{
-		$sql="select period from dx_stu_login  group by period";
-		$query = $this->db->query($sql);
-		return $query->result_array();
+		$this->db->update('dx_classroom', $data, array('id'=>$id));
 	}
+
+
+
+
+
 
 	/**
 	 * 传入id进行进行修改对应数据的状态

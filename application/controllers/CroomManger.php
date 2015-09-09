@@ -103,6 +103,57 @@ class CroomManger extends My_Controller {
 		$this->load->view('CroomManger/examDlist',$alldata);
 	}
 
+
+	// changeOneInfo修改一个教室的基本情况
+	public function changeOneInfo()
+	{
+		$id=$this->input->post('id');
+		$roomname=$this->input->post('roomname');
+		$apartment=$this->input->post('apartment');
+		$roomsize=$this->input->post('roomsize');
+		$managerContent=$this->input->post('managerContent');
+		$data = array(
+						'roomname' =>$roomname , 
+						'apartment' => $apartment, 
+						'roomsize' => $roomsize, 
+						'roomrealsize' =>count(explode("  ",trim($managerContent))) , 
+						'managerContent' => trim($managerContent)
+					 );
+		$this->croommanger->changeOneInfo($id,$data);
+		$this->examrDistribution();
+		
+	}
+
+	// 对一个教室详情
+	public function OneRoomData()
+	{
+		$id=$this->input->get('id');
+		$alldata['newuserinfos']=$this->croommanger->OneRoomData($id);
+		$this->load->view('CroomManger/edit',$alldata);
+
+	}
+
+
+	
+
+	// 对一个教室进行编辑的操作
+	public function cHanOneRoom()
+	{
+		$id=$this->input->post('id');
+		$roomname=$this->input->post('roomname');
+		$apartment=$this->input->post('apartment');
+		$roomsize=$this->input->post('roomsize');
+		$data = array(
+						'roomname' =>$roomname , 
+						'apartment' => $apartment, 
+						'roomsize' => $roomsize, 
+					 );
+		// p($data);die();
+		$this->croommanger->changeOneRoomData($id,$data);
+		$this->index();
+		
+	}
+
 	// 分配教室详情
 	public function eroominfo()
 	{
@@ -171,12 +222,24 @@ class CroomManger extends My_Controller {
 		$stuperid=$this->input->post('stuperid');
 		$realsize=$this->input->post('realsize');
 		$roomname=$this->input->post('roomname');
+
+		// 没有分配到的标志
+		$fpcondition=$this->input->post('fpcondition');
+		$fpuserinfo=$this->input->post('fpuserinfo');
+		$fpuserinfocount=$this->input->post('fpuserinfocount');
+
+
 		$perName='第'.$stuperid.'期';
 		$data = array(
 						'roomId' => $classid, 
 						'stuId' => $stuperid, 
 						'realsize' => $realsize, 
 						'FpRoomname' => $roomname, 
+
+						'fpcondition' => $fpcondition, 
+						'fpuserinfo' => $fpuserinfo, 
+						'fpuserinfocount' => $fpuserinfocount, 
+
 						'perName' => $perName, 
 						'parttime' => date('y-m-d',time()), 
 						'bigData' => $bigdata

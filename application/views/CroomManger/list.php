@@ -22,13 +22,9 @@
                 <strong>学生座位安排</strong></div>
             <div class="padding border-bottom">
                 <input type="button" class="button button-small border-green" value="添加教室" onclick="location.href='index.php/CroomManger/add';" />
-                <input type="button" id='addAllstu' class="button button-small border-yellow" value="选择EXCEL" />
             </div>
             <table class="table table-hover">
                 <tr>
-                    <th width="4
-                    5" >
-                    </th>
                     <th width="100">
                        教室名称 
                     </th>
@@ -48,9 +44,6 @@
                 <?php foreach($newuserinfos as $v):?>
                     <tr>
                     <td >
-                        <input type="Checkbox" isflag="0" class='onecheck' dataid="<?php echo $v['id'];  ?> ">
-                    </td>
-                    <td >
                         <strong>
                             <?php echo $v['roomname'];  ?>
                         </strong>
@@ -64,7 +57,7 @@
                         <?php echo $v['flag'];  ?>
                     </td>
                     <td >
-                        <a href="">详情</a>
+                        <a  href="<?php echo site_url().'/CroomManger/OneRoomData?id='.$v['id']; ?>">详情</a>
                         &nbsp;&nbsp;||&nbsp;&nbsp;
                         <a class="rfont" href="<?php echo site_url().'/CroomManger/delonedata?id='.$v['id']; ?>">删除</a>
                     </td>

@@ -126,7 +126,11 @@
         <input type="text" id='classid' name='classid'>
         <input type="text" id='stuperid' name='stuperid'>
         <input type="text" id='Lrealsize' name='realsize'>
+        <input type="text" id='fpcondition' name='fpcondition'>
         <input type="text"  name='roomname' value=" <?php echo $roomname;  ?>">
+        <!-- 没有分配的学生的具体信息 -->
+        <input type="text" id='fpuserinfo' name='fpuserinfo'>
+        <input type="text" id='fpuserinfocount' name='fpuserinfocount'>
     </form>
 </body>
 </html>
