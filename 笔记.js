@@ -6,6 +6,8 @@ localhost/DX_Project/
 年级-->
 alter table dx_stu_login add ngrade varchar(30) DEFAULT NULL COMMENT '年级'
 alter table dx_stu_login add recycletime varchar(30) DEFAULT NULL COMMENT '回收站的修改时间'
+
+
 用户状态--->
 ---0 无效用户  1 注册但没有生效  2 生效的用户  3 往期的用户
 alter table  dx_stu_login modify STATUS int(11) DEFAULT '2' COMMENT '用户状态(0 无效用户  1 注册但没有生效  2 生效的用户  3 往期的用户)'
@@ -34,9 +36,34 @@ INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('demo
 
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('StuManager','学生管理模块',1,1,0,1,1,0);
 
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('MarkManager','成绩管理模块',1,1,0,1,1,0);
+
+
+
 二级列表：
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('AddStudents','添加列表',1,1,90,2,1,0);
+
+
+
+
+
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('CroomManger','座位管理',1,1,90,2,1,0);
+
+
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('CroomManger','成绩管理',1,1,90,2,1,0);
+
+
+
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('CroomManger','考试管理',1,1,12,2,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('CroomManger','上课管理',1,1,12,2,1,0);
+
+
+
+
+
+
+
+
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('CroomManger','考试座位管理',1,1,90,2,1,0);
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('BaiDuEditer','百度编辑器功能',1,1,90,2,1,0);
 
@@ -56,7 +83,14 @@ INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('exam
 
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lesssionDistribution','上课分配',1,1,97,3,1,0);
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examrDistribution','考试分配',1,1,97,3,1,0);
+
+
 INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('examResult','考试分配结果',1,1,97,3,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('lessionResult','上课座位分配结果',1,1,97,3,1,0);
+
+
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('importMark','导入成绩',1,1,97,3,1,0);
+INSERT INTO dx_node(NAME,title,STATUS,sort,pid,LEVEL,TYPE,group_id) VALUES('markInfo','查看成绩',1,1,97,3,1,0);
 
 
 
@@ -120,6 +154,41 @@ CREATE TABLE IF NOT EXISTS `dx_classroomMangerInfo` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='上课与教室详情分配表' AUTO_INCREMENT=1 ;
 
 
+
+
+考试录入表-->具体信息表：
+DROP TABLE IF EXISTS `dx_markangerInfo`;
+CREATE TABLE IF NOT EXISTS `dx_markangerInfo` (
+  `id` int(30) NOT NULL AUTO_INCREMENT,
+  `belong` varchar(500) DEFAULT NULL COMMENT '学院',
+  `period` varchar(50) DEFAULT NULL COMMENT '培训期数',
+   `personcount` varchar(50) DEFAULT NULL COMMENT '人数',
+  `schoolzone` varchar(500) DEFAULT NULL COMMENT '校区',
+  `inportmarkTime` varchar(500) DEFAULT NULL COMMENT '录入成绩时间',
+  `markBz` varchar(500) DEFAULT NULL COMMENT '考试备注',
+  `markcomment` varchar(100)  DEFAULT NULL COMMENT '考试说明',
+  `markInfo` text  DEFAULT NULL COMMENT '学员成绩具体情况',
+  `teachercount` int(10)  DEFAULT NULL COMMENT '老师人数',
+  `stucount` int(10)  DEFAULT NULL COMMENT '学生人数',
+  `passcount` int(30)  DEFAULT NULL COMMENT '合格人数',
+  `nopasscount` int(30)  DEFAULT NULL COMMENT '不合格人数',
+  `nopassinfo` text   DEFAULT NULL COMMENT '不合格具体情况',
+  `passinfo` text   DEFAULT NULL COMMENT '合格具体情况',
+  `passpercernt` varchar(50)  DEFAULT NULL COMMENT '合格百分数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='考试录入表' AUTO_INCREMENT=1 ;
+
+
+
+
+
+
+
+
+
+
+
+
 以下就做不到了，只支持一种格式
 
 这个格式是通吃2种Excel的格式:
@@ -133,6 +202,7 @@ DROP TABLE IF EXISTS `dx_examAllocation`;
 CREATE TABLE IF NOT EXISTS `dx_examAllocation` (
   `id` int(30) NOT NULL AUTO_INCREMENT COMMENT '自增的id',
   `roomId` varchar(500) DEFAULT NULL COMMENT '教室id',
+  `aflag` varchar(500) DEFAULT NULL COMMENT '类型【上课  考试】',
   `FpRoomname` varchar(500) DEFAULT NULL COMMENT '教室名称',
   `stuId` varchar(50) DEFAULT NULL COMMENT '期数id',
   `perName` varchar(50) DEFAULT NULL COMMENT '期数名称',
@@ -150,6 +220,9 @@ CREATE TABLE IF NOT EXISTS `dx_examAllocation` (
 
 
 
+select * from (SELECT ea.id,ea.roomId,ea.aflag,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc) t where t.aflag='考试';
+select * from () t where t.aflag='考试';
+SELECT ea.id,ea.roomId,ea.aflag,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id where ea.aflag=' 考试' ORDER BY parttimeInfo desc
 
 
 

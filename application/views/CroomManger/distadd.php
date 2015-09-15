@@ -128,6 +128,7 @@
         <input type="text" id='Lrealsize' name='realsize'>
         <input type="text" id='fpcondition' name='fpcondition'>
         <input type="text"  name='roomname' value=" <?php echo $roomname;  ?>">
+        <input type="text"  name='flag' value=" <?php echo $flag;  ?>">
         <!-- 没有分配的学生的具体信息 -->
         <input type="text" id='fpuserinfo' name='fpuserinfo'>
         <input type="text" id='fpuserinfocount' name='fpuserinfocount'>

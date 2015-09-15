@@ -25,19 +25,31 @@ class Allocation extends My_Controller {
 	{
 		$id=$this->input->get('id');
 		$data=$this->examAllcation->OneDataFromID($id);
+		// p($data);die();
 		$target=$data[0]['bigData'];
 		$alldata['newuserinfos']=json_decode($target,true);
 		$alldata['fpid']=$id;
+		$alldata['flag']=$data[0]['aflag'];
 		$this->load->view('CroomManger/OnePage',$alldata);
 	}
 
+	// 返回页面
+	public function responseTohistory()
+	{
+		$flag=trim($this->input->get('flag'));
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoomFlag($flag);
+		$this->load->view('CroomManger/examok',$alldata);
+	}
 
 	// 删除对应的id的数据
 	public function deleteOne()
 	{
-		$id=$this->input->get('id');
+		$id=trim($this->input->get('id'));
+		$flag=trim($this->input->get('flag'));
 		$this->examAllcation->deleteoneData($id);
-		$this->index();
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoomFlag($flag);
+		// $this->index();
+		$this->load->view('CroomManger/examok',$alldata);
 	}
 
 

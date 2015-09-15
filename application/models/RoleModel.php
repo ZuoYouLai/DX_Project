@@ -91,4 +91,11 @@ class RoleModel extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->num_rows(); 
 	}
+
+
+	public function getOneRoleData($id)
+	{
+		$data = $this->db->where(array('id'=>$id))->get('dx_role')->result_array();
+		return $data;
+	}
 }

@@ -51,7 +51,7 @@
                             <label for="keywords">教室类型<b class='rfont'></b>:</label></div>
                         <div class="field">
                             <select name="flag" id="roomflag">
-                                <option value="教室">上课</option>
+                                <option value="上课">上课</option>
                                 <option value="考试">考试</option>
                             </select>
                         </div>

@@ -128,13 +128,18 @@ class AddStudents extends My_Controller {
 			}
 		}
 		//批量导入问题
+		// p($alldata);die();
 		// 1.校验用户是否存在
 		$mynewUsers=$this->IsHaveUser($alldata);
+		// p($mynewUsers);die();
 		$sumsize=count($alldata);
 		$mynewUserssize=count($mynewUsers);
 		$num=$sumsize-$mynewUserssize;
 		// 2.导入过滤的数据
-		$this->addstumodel->addAllFromOneExcel($alldata);
+		if ($mynewUserssize) {
+			$this->addstumodel->addAllFromOneExcel($mynewUsers);
+		}
+		
 		success('AddStudents/index','总共导入数据'.$sumsize.'条,成功导入'.$mynewUserssize.'条,失败'.$num.'条[原因:此用户已存在]');
 
 

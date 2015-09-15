@@ -90,5 +90,8 @@ class AddStudentModel extends CI_Model {
 		$data = $this->db->where(array('user_name'=>$xnum))->get('dx_stu_login')->result_array();
 		return count($data);
 	}
+
+
+	
 	
 }

@@ -24,14 +24,16 @@
                     <th width="100">
                        教室名称 
                     </th>
+                     <th width="100">
+                       使用 
+                    </th>
                     <th width="120">
                         教室规格
                     </th>
-                    <th width="120">
+                    <th width="100">
                         教室可座数
                     </th> 
-                    
-                     <th width="120">
+                    <th width="120">
                        分配实际人数
                     </th>
                     <th width="100">
@@ -55,6 +57,9 @@
                         </strong>
                     </td>
                     <td >
+                       <?php echo $v['aflag'];  ?>                 
+                    </td>
+                    <td >
                        <?php echo $v['roomsize'];  ?>                 
                     <td>
                         <?php echo $v['roomrealsize'];  ?>  
@@ -74,7 +79,7 @@
                      </td>
                     <td >
                         <input type="button" id='checkExcel' class="button button-small border-blue" value="详情"  onclick="location.href='index.php/Allocation/getInfo?id='+<?php echo $v['id'];  ?>" />
-                        <input type="button" id='checkExcel' class="button button-small border-red" value="删除"  onclick="location.href='index.php/Allocation/deleteOne?id='+<?php echo $v['id'];  ?>" />
+                        <input type="button" id='checkExcel' class="button button-small border-red" value="删除"  onclick="location.href='index.php/Allocation/deleteOne?id='+<?php echo $v['id'];  ?>+'&flag='+'<?php echo $v['aflag'];  ?>'" />
                         <input type="button" id='checkExcel' class="button button-small border-yellow" onclick="location.href='index.php/Allocation/downExcel?id='+<?php echo $v['id'];  ?>" value="打印Excel" />
                     </td>
                     </tr>

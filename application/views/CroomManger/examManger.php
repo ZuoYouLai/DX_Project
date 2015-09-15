@@ -71,6 +71,7 @@
     <!-- 隐藏域进行隐藏对应的Form操作 -->
     <form method="POST"  enctype="multipart/form-data" action="<?php echo site_url().'/CroomManger/ExamoneRoomExcel'; ?>" id="myupFormFile">
         <input type='file' name='Excel' id='myUpFile'>
+        <input type='text' name='flag'  value=" <?php echo $flag;  ?>">
     </form>
 </body>
 </html>

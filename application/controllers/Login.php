@@ -9,6 +9,7 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		
 	}
 	public function index()
 	{
@@ -27,11 +28,15 @@ class Login extends CI_Controller {
 			$passcode=$this->input->post('passcode');
 			if ($passcode==$this->session->userdata('code')){
 				$this->load->model('UserModel','',TRUE);
+				// $this->load->model('AddStudentModel',true);
 				$result=$this->UserModel->login($username,md5($password));
 				if ($result){//登录成功
 					if ($result['status']=='1'){
 						//更新登录状态
 						$this->UserModel->editUser(array('last_login_time'=>now(),'last_login_ip'=>$this->input->ip_address()),array('id'=>$result['id']));
+						// 查出对应的role的角色
+						$result['role']=$this->UserModel->getOneRoleData($result['role_id']);
+						// p($result);die();
 						$this->session->set_userdata('user', $result);//保存登录状态
 						// $this->session->set_userdata('myrole', "超级管理员");//保存登录状态
 						show_error('index.php/Index/index',500,'提示信息：登录成功！');

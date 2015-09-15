@@ -52,6 +52,7 @@ class CroomManger extends My_Controller {
 	public function examManger()
 	{
 		$alldata['newuserinfos']=$this->croommanger->getExamData();
+		$alldata['flag']="考试";
 		$this->load->view('CroomManger/examManger',$alldata);
 
 	}
@@ -59,7 +60,8 @@ class CroomManger extends My_Controller {
 	// 上课教室数据
 	public function lesssion()
 	{
-		$alldata['newuserinfos']=$this->croommanger->getExamData();
+		$alldata['newuserinfos']=$this->croommanger->getLessionData();
+		$alldata['flag']="上课";
 		$this->load->view('CroomManger/examManger',$alldata);
 	}
 
@@ -67,6 +69,7 @@ class CroomManger extends My_Controller {
 	public function ExamoneRoomExcel()
 	{
 		$id=$this->input->get('id');
+		$flag=$this->input->post('flag');
 		// p($id);die;
 		$targetfile=$this->ExcelMethod('Excel');
 		// p($targetfile);die();
@@ -75,14 +78,14 @@ class CroomManger extends My_Controller {
 		if (count($index)>1) {
 			$data=$this->doExcelObj($index['index'],$obj);
 			// 查出对应id的数据
-			$sdata=$this->croommanger->getExamDataToId($id);
+			$sdata=$this->croommanger->getExamDataToId($id,trim($flag));
 			$sdata[0]['managerContent']=$data;
 			$sdata[0]['roomrealsize']=$index['realsize'];
 			$sdata[0]['id']='';
 			$this->croommanger->insertClassRoomMangerInfoData($sdata[0]);
 			success('CroomManger/index','成功插入'.count($sdata).'条数据成功....');
 		}else{
-			
+			success('CroomManger/index','你导入的Excel不符合要求');
 		}
 		
 		
@@ -91,7 +94,10 @@ class CroomManger extends My_Controller {
 	// 上课教室分配
 	public function lesssionDistribution()
 	{
-		$this->index();
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicData('上课');
+		$alldata['flag']='上课';
+		// p($alldata);die;
+		$this->load->view('CroomManger/examDlist',$alldata);
 	}
 
 
@@ -99,6 +105,7 @@ class CroomManger extends My_Controller {
 	public function examrDistribution()
 	{
 		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicData('考试');
+		$alldata['flag']='考试';
 		// p($alldata);die;
 		$this->load->view('CroomManger/examDlist',$alldata);
 	}
@@ -158,7 +165,8 @@ class CroomManger extends My_Controller {
 	public function eroominfo()
 	{
 		$id=$this->input->get('id');
-		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId('考试',$id);
+		$flag=$this->input->get('flag');
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId($flag,$id);
 		$alldata['flag']=$alldata['newuserinfos'][0]['flag'];
 		$this->load->view('CroomManger/eroomInfo',$alldata);
 	}
@@ -167,17 +175,20 @@ class CroomManger extends My_Controller {
 
 
 
-	// 考试教室分配页
+	// 考试教室 上课分配页
 	public function examrDistriPage()
 	{
 		$id=$this->input->get('id');
-		// p($id);die;
+		$flag=$this->input->get('flag');
+		// p($flag);die;
 		$alldata['group']=$this->addstumodel->getGroup();
-		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId('考试',$id);
+		$alldata['newuserinfos']=$this->croommanger->ClassRoomMangerDicDataAndId($flag,$id);
 		$alldata['managerContent']=$alldata['newuserinfos'][0]['managerContent'];
 		$alldata['roomrealsize']=$alldata['newuserinfos'][0]['roomrealsize'];
 		$alldata['roomname']=$alldata['newuserinfos'][0]['roomname'];
 		$alldata['id']=$alldata['newuserinfos'][0]['id'];
+		// 教室还是上课的标志
+		$alldata['flag']=$flag;
 		$this->load->view('CroomManger/distadd',$alldata);
 	}
 
@@ -217,16 +228,18 @@ class CroomManger extends My_Controller {
 	// 保存分配好的教室的信息
 	public function saveOneData()
 	{
-		$bigdata=$this->input->post('bigdata');
-		$classid=$this->input->post('classid');
-		$stuperid=$this->input->post('stuperid');
-		$realsize=$this->input->post('realsize');
-		$roomname=$this->input->post('roomname');
+		$bigdata=trim($this->input->post('bigdata'));
+		$classid=trim($this->input->post('classid'));
+		$stuperid=trim($this->input->post('stuperid'));
+		$realsize=trim($this->input->post('realsize'));
+		$roomname=trim($this->input->post('roomname'));
+
+		$flag=trim($this->input->post('flag'));
 
 		// 没有分配到的标志
-		$fpcondition=$this->input->post('fpcondition');
-		$fpuserinfo=$this->input->post('fpuserinfo');
-		$fpuserinfocount=$this->input->post('fpuserinfocount');
+		$fpcondition=trim($this->input->post('fpcondition'));
+		$fpuserinfo=trim($this->input->post('fpuserinfo'));
+		$fpuserinfocount=trim($this->input->post('fpuserinfocount'));
 
 
 		$perName='第'.$stuperid.'期';
@@ -235,6 +248,7 @@ class CroomManger extends My_Controller {
 						'stuId' => $stuperid, 
 						'realsize' => $realsize, 
 						'FpRoomname' => $roomname, 
+						'aflag' => $flag, 
 
 						'fpcondition' => $fpcondition, 
 						'fpuserinfo' => $fpuserinfo, 
@@ -246,16 +260,30 @@ class CroomManger extends My_Controller {
 					 );
 		
 		$this->examAllcation->insertAData($data);
-		success('Allocation/index','分配保存成功!');
+		$this->responseToResult($flag);
 	}
 
 
 	// 分配好的页面
-	// examResult
+	public function responseToResult($flag)
+	{
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoomFlag($flag);
+		$this->load->view('CroomManger/examok',$alldata);
+	}
+
+
+
+	// 分配好的页面
 	public function examResult()
 	{
-		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoom();
-		// p($alldata);die();
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoomFlag('考试');
+		$this->load->view('CroomManger/examok',$alldata);
+	}
+
+
+	public function lessionResult()
+	{
+		$alldata['newuserinfos']=$this->examAllcation->leftJoinRoomFlag('上课');
 		$this->load->view('CroomManger/examok',$alldata);
 	}
 

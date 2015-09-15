@@ -41,9 +41,9 @@ class CroomMangerModel extends CI_Model {
 		return $data;
 	}
 	// 找考试教室数据  加上 id
-	public function getExamDataToId($id)
+	public function getExamDataToId($id,$flag)
 	{
-		$data = $this->db->where(array('flag'=>'考试','id'=>$id))->get('dx_classroom')->result_array();
+		$data = $this->db->where(array('id'=>$id,'flag'=>$flag))->get('dx_classroom')->result_array();
 		return $data;
 	}
 	

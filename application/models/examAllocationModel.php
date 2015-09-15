@@ -24,6 +24,17 @@ class examAllocationModel extends CI_Model {
 		return $query->result_array();
 	}
 
+	
+	// leftJoinRoomFlag根据类型进行查找对应的分配结果
+	function leftJoinRoomFlag($flag)
+	{
+		$sql="SELECT ea.id,ea.roomId,ea.aflag,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id where ea.aflag='".$flag."' ORDER BY parttimeInfo desc";
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+
+
+
 	// 根据id查询数据
 	function OneDataFromID($id)
 	{

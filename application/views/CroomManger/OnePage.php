@@ -19,7 +19,7 @@
         <div class="panel admin-panel">
             <div class="panel-head">
                 <strong>学生座位分配情况</strong>  
-                <input type="button" id='checkExcel' class="button button-small border-blue mr35"  onclick="location.href='index.php/Allocation/index'" value="返回" />
+                <input type="button" id='checkExcel' class="button button-small border-blue mr35"  onclick="location.href='index.php/Allocation/responseTohistory?flag='+'<?php echo $flag;  ?>'" value="返回" />
                 <input type="button" id='checkExcel' class="button button-small border-yellow mr15"  onclick="location.href='index.php/Allocation/downExcel?id='+<?php echo $fpid;  ?>" value="打印Excel" /></div>
             <table class="table table-hover">
                 <tr>
@@ -35,12 +35,15 @@
                     <th width="120">
                       名字
                     </th> 
+                    <th width="120">
+                      类型
+                    </th> 
                 </tr>
                 <?php foreach($newuserinfos as $key => $v):?>
                     <tr>
                     <td >
                         <strong>
-                            <?php echo $key  ?>
+                            <?php echo $key+1  ?>
                         </strong>
                     </td>
                     <td >
@@ -50,6 +53,9 @@
                     </td> 
                     <td>
                         <?php echo $v['username'];  ?>  
+                    </td>
+                     <td>
+                       <?php echo $flag;  ?>
                     </td>
                     </tr>
                 <?php endforeach ?>
