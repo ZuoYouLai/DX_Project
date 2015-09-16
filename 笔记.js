@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `dx_classroomMangerInfo` (
 DROP TABLE IF EXISTS `dx_markangerInfo`;
 CREATE TABLE IF NOT EXISTS `dx_markangerInfo` (
   `id` int(30) NOT NULL AUTO_INCREMENT,
+  `title` varchar(500) DEFAULT NULL COMMENT '考试名称',
   `belong` varchar(500) DEFAULT NULL COMMENT '学院',
   `period` varchar(50) DEFAULT NULL COMMENT '培训期数',
    `personcount` varchar(50) DEFAULT NULL COMMENT '人数',

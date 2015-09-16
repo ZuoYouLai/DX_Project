@@ -46,52 +46,38 @@ class MarkManagerModel extends CI_Model {
 	}
 
 
-
-
-	
 	//插入一条分好考试教室学生的数据
 	function insertaddmarksData($data){
 		$this->db->insert('dx_markangerInfo', $data);
 	}
 
-	// left join的关联
-	function leftJoinRoom()
+
+	// 查询考试的成绩的具体情况
+	function getStuMarkResultInfo()
 	{
-		$sql="SELECT ea.id,ea.roomId,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id ORDER BY parttimeInfo desc";
+		$sql="SELECT * FROM dx_markangerInfo ORDER BY inportmarkTime DESC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 
-	
-	// leftJoinRoomFlag根据类型进行查找对应的分配结果
-	function leftJoinRoomFlag($flag)
+	function getStuMarkResultInfoByBelong($belong)
 	{
-		$sql="SELECT ea.id,ea.roomId,ea.aflag,ea.parttimeInfo,ea.bigData,ea.realsize,ea.perName,ea.parttime,cm.roomname,cm.apartment,cm.roomsize,cm.roomrealsize FROM dx_examAllocation ea LEFT JOIN dx_classroomMangerInfo cm ON ea.roomId = cm.id where ea.aflag='".$flag."' ORDER BY parttimeInfo desc";
+		$sql="SELECT * FROM dx_markangerInfo where belong='".$belong."' ORDER BY inportmarkTime DESC";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-
-
-
-	// 根据id查询数据
-	function OneDataFromID($id)
-	{
-		$data = $this->db->where(array('id'=>$id))->get('dx_examAllocation')->result_array();
-		return $data;
-	}
-
 
 	// 删除一条数据
-	function deleteoneData($id)
+	function deleteOne($id)
 	{
-		$this->db->delete('dx_examAllocation', array('id'=>$id));
+		$this->db->delete('dx_markangerInfo', array('id'=>$id));
 	}
 
 
-	// ==
-	function OneDataFromIDdemo()
+	// 根据学院  期数查出全部的学生信息
+	function getOneMarkInfos($id)
 	{
-		$data = $this->db->where(array('id'=>1))->get('dx_examAllocation')->result_array();
+		$data = $this->db->where(array('id'=>$id))->get('dx_markangerInfo')->result_array();
 		return $data;
 	}
 

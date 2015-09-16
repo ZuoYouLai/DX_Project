@@ -50,7 +50,7 @@ $(function(){
 	$oksubmit.click(function(){
 		var bzValue=$examBz.val().trim();
 		var examValue=$examName.val().trim();
-		if (examValue) 
+		if (!examValue) 
 		{
 			alert("请填入考试名称...");
 			return;
@@ -62,6 +62,13 @@ $(function(){
 	
 
 
+	// 详情页
+	$myselectMark=$("#myselectMark");
+	// 选择框改变
+	$myselectMark.change(function(){
+		var belong=$(this).val();
+		location.href="index.php/MarkManager/markInfo?belong="+belong;
+	});
 
 
 

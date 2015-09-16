@@ -50,33 +50,10 @@ class MarkManager extends My_Controller {
 		$alldata['belong']=$belong;
 		$alldata['period']=$period;
 		$this->load->view('MarkManger/infolist',$alldata);
-		// p($groupInfo);
 	}
 
 
 
-
-
-// 	DROP TABLE IF EXISTS `dx_markangerInfo`;
-// CREATE TABLE IF NOT EXISTS `dx_markangerInfo` (
-//   `id` int(30) NOT NULL AUTO_INCREMENT,
-//   `belong` varchar(500) DEFAULT NULL COMMENT '学院',
-//   `period` varchar(50) DEFAULT NULL COMMENT '培训期数',
-//    `personcount` varchar(50) DEFAULT NULL COMMENT '人数',
-//   `schoolzone` varchar(500) DEFAULT NULL COMMENT '校区',
-//   `inportmarkTime` varchar(500) DEFAULT NULL COMMENT '录入成绩时间',
-//   `markBz` varchar(500) DEFAULT NULL COMMENT '考试备注',
-//   `markcomment` varchar(100)  DEFAULT NULL COMMENT '考试说明',
-//   `markInfo` text  DEFAULT NULL COMMENT '学员成绩具体情况',
-//   `teachercount` int(10)  DEFAULT NULL COMMENT '老师人数',
-//   `stucount` int(10)  DEFAULT NULL COMMENT '学生人数',
-//   `passcount` int(30)  DEFAULT NULL COMMENT '合格人数',
-//   `nopasscount` int(30)  DEFAULT NULL COMMENT '不合格人数',
-//   `nopassinfo` text   DEFAULT NULL COMMENT '不合格具体情况',
-//   `passinfo` text   DEFAULT NULL COMMENT '合格具体情况',
-//   `passpercernt` varchar(50)  DEFAULT NULL COMMENT '合格百分数',
-//   PRIMARY KEY (`id`)
-// ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='考试录入表' AUTO_INCREMENT=1 ;
 
 	
 	// 查看成绩
@@ -99,11 +76,36 @@ class MarkManager extends My_Controller {
 		{
 			// 进行对excel对象进行处理 user_name
 			$mm=$this->DoMarkData($obj,$boool,"学号");
+			$exam=$this->DoMarkData($obj,$boool,"成绩");
 			// 进行对号入座的匹配
 			$data=$this->MarkManager->getStuInfos($belong,$period);
-			p($mm);
-
-
+			// 合成的对象
+			$comdata=$this->iSpecialData($mm,$exam,$data);
+			if(!count($comdata))
+			{
+				success('MarkManager/importMarkinfo?belong='.$belong.'&period='.$period,'你导入的Excel不符合要求');
+			}
+			// 进行合格 与 不合格的操作
+			$alldata=$this->getMarkDataInfo($comdata);
+			$finaldata= array(
+								'belong' =>$belong , 
+								'period' =>$period, 
+								'title' =>$examname, 
+								'schoolzone' =>$data[0]['school_zone'], 
+								'personcount' => count($data), 
+								'inportmarkTime' =>date("Y-m-d H:i:s",time()) , 
+								'markBz' =>$bz, 
+								'markcomment' =>$alldata['average'], 
+								'markInfo' => json_encode($comdata), 
+								'passcount' =>count($alldata['pass']) , 
+								'nopasscount' =>count($alldata['nopass']) , 
+								'nopassinfo' =>json_encode($alldata['nopass']) , 
+								'passinfo' =>json_encode($alldata['pass']) ,
+								'passpercernt' =>count($alldata['pass'])/ count($comdata)
+							 );
+			// 插入数据操作
+			$this->MarkManager->insertaddmarksData($finaldata);
+			$this->markInfo();
 		}
 		// 不符合要求的Excel对象
 		else
@@ -114,16 +116,88 @@ class MarkManager extends My_Controller {
 	}
 
 
-	// 不满足进行页面的详情页
-	// 进行如成绩详情导入页
-	// public function falsetoMarkinfo($belong,$period)
-	// {
-	// 	$groupInfo=$this->MarkManager->specialtAndPeriodNamesByBAP($belong,$period);
-	// 	$alldata['newuserinfos']=$groupInfo;
-	// 	$alldata['belong']=$belong;
-	// 	$alldata['period']=$period;
-	// 	$this->load->view('MarkManger/infolist',$alldata);
-	// }
+
+	// 查看成绩
+	public function markInfo()
+	{
+		$belong=$this->input->get('belong');
+		$group=$this->MarkManager->specialtNames();
+		if ($belong) {
+					$alldata['belong']=$belong;
+					$groupInfo=$this->MarkManager->getStuMarkResultInfoByBelong($belong);
+		}else{
+					$groupInfo=$this->MarkManager->getStuMarkResultInfo();
+		}
+		$alldata['group']=$group;
+		$alldata['newuserinfos']=$groupInfo;
+		$this->load->view('MarkManger/result',$alldata);
+	}
+
+
+	// 删除一条数据
+	public function deleteOne()
+	{
+		$id=$this->input->get('id');
+		$this->MarkManager->deleteOne($id);
+		$this->markInfo();
+	}
+
+	// 一条数据的详情
+	public function onedataInfo()
+	{
+		$id=$this->input->get('id');
+		$alldata['newuserinfos']=$this->MarkManager->getOneMarkInfos($id);
+		$this->load->view('MarkManger/resultInfo',$alldata);
+	}
+
+	
+
+
+
+
+
+	// 算出成绩的各种参数
+	public function  getMarkDataInfo($onedata)
+	{
+		$bigdata=array();
+		$pass=array();
+		$nopass=array();
+		$sum=0;
+		foreach ($onedata as $key => $value) {
+			$sum+=$value['mark'];
+			if ($value['mark']>=60) 
+			{
+				array_push($pass, $value);
+			}
+			else
+			{
+				array_push($nopass, $value);
+			}
+		}
+		$bigdata['sum']=$sum;
+		$bigdata['average']=$sum/count($onedata);
+		$bigdata['pass']=$pass;
+		$bigdata['nopass']=$pass;
+		return $bigdata;
+	}
+
+
+	// 对号入座
+	public function iSpecialData($flag,$target,$data)
+	{
+		$arrdata=array();
+		foreach ($data as $key => $value) {
+			$i=0;
+			foreach ($flag as $index=> $v) {
+				if ($value['user_name']==$v) {
+					$value['mark']=$target[$i];
+					array_push($arrdata, $value);
+				}
+				$i++;
+			}
+		}
+		return $arrdata;
+	}
 
 
 	// 处理除第一行的数据
@@ -237,11 +311,19 @@ class MarkManager extends My_Controller {
 
 
 
-	// 查看成绩
-	public function markInfo()
-	{
-		echo "..................";
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
