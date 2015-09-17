@@ -91,7 +91,7 @@
                        <?php echo $v['schoolzone'];  ?>
                     </td>
                      <td >
-                       <?php echo $v['passpercernt'];  ?>
+                       <?php echo $v['passpercernt']*100;  ?>%
                     </td>
 					<td >
                        <?php echo $v['markcomment'];  ?>

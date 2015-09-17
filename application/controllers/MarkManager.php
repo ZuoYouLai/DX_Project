@@ -147,10 +147,47 @@ class MarkManager extends My_Controller {
 	{
 		$id=$this->input->get('id');
 		$alldata['newuserinfos']=$this->MarkManager->getOneMarkInfos($id);
+		$data=$alldata['newuserinfos'][0]['markInfo'];
+		$info=json_decode($data);
+		$array=array();
+		// $infoData=$this->objectToArray(json_decode($data));
+		foreach ($info as $key => $value) {
+			$infoData=$this->objectToArray($value);
+			array_push($array, $infoData);
+			
+		}
+		// 对象变为数组后再进行快速排序
+		$alldata['stuInfo']=$this->descOrderByScore($array);
 		$this->load->view('MarkManger/resultInfo',$alldata);
 	}
 
 	
+	// 进行对成绩排序
+	public function descOrderByScore($array)
+	{
+		// 快速排序
+		if (count($array)<=1) {
+			return  $array;
+		}
+		$key=$array[0];
+		$leftArr=array();
+		$rightArr=array();
+		for($i=1;$i<count($array);$i++)
+		{
+			if ($key['mark']<=$array[$i]['mark']) {
+				array_push($leftArr, $array[$i]);
+			}
+			else
+			{
+				array_push($rightArr, $array[$i]);
+			}
+		}
+		// 进行递归算出各自左右组内的排序
+		$leftArr=$this->descOrderByScore($leftArr);
+		$rightArr=$this->descOrderByScore($rightArr);
+		// 合并左 中 右的数组
+		return array_merge($leftArr,array($key),$rightArr);
+	}
 
 
 
@@ -311,6 +348,24 @@ class MarkManager extends My_Controller {
 
 
 
+	public function arrayToObject($e){
+    if( gettype($e)!='array' ) return;
+    foreach($e as $k=>$v){
+        if( gettype($v)=='array' || getType($v)=='object' )
+            $e[$k]=(object)arrayToObject($v);
+    }
+	    return (object)$e;
+	}
+	 
+	public function objectToArray($e){
+	    $e=(array)$e;
+	    foreach($e as $k=>$v){
+	        if( gettype($v)=='resource' ) return;
+	        if( gettype($v)=='object' || gettype($v)=='array' )
+	            $e[$k]=(array)objectToArray($v);
+	    }
+	    return $e;
+	}
 
 
 

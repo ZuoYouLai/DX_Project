@@ -28,7 +28,12 @@
             <div class="panel-head">
                 <strong>列表</strong></div>
             <div class="padding border-bottom">
-            	
+                <input type="button"  class="button button-small border-green" value="打印成绩单" onclick="location.href='index.php/MarkManager/onedataInfo?id='+<?php echo "==";  ?>;"/>
+            </div>
+            <div class="padding border-bottom">
+                <input type="button"  class="button button-small border-yellow" value="合格信息" id="passInfo"/>
+                <input type="button"  class="button button-small border-red" value="不合格信息" id="NopassInfo"/>
+            	<input type="button"  class="button button-small border-blue" value="全部信息" id="AllpassInfo"/>
             </div>
             <table class="table table-hover">
                 <tr>
@@ -56,9 +61,6 @@
                     <th width="200">
                         时间
                     </th>
-                    <th width="200">
-                      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;操作
-                    </th>
                 </tr>
                 <?php foreach($newuserinfos as $v):?>
                     <tr>
@@ -79,7 +81,7 @@
                        <?php echo $v['schoolzone'];  ?>
                     </td>
                      <td >
-                       <?php echo $v['passpercernt'];  ?>
+                       <?php echo $v['passpercernt']*100;  ?>%
                     </td>
 					<td >
                        <?php echo $v['markcomment'];  ?>
@@ -90,9 +92,50 @@
                     </tr>
                 <?php endforeach ?>
             </table>
+
+            <div class="padding border-bottom">
+                
+            </div>
+    
+            <table class="table table-hover">
+                <tr>
+                    <th width="100">
+                       姓名 
+                    </th>
+                    <th width="100">
+                       培训期数 
+                    </th>
+                    <th width="100">
+                       学号 
+                    </th>
+                    <th width="80">
+                        成绩
+                    </th>
+                </tr>
+                <?php foreach($stuInfo as $v):?>
+                    <tr>
+                    <td >
+                       <?php echo $v['name'];  ?>
+                    </td>
+
+                    <td >
+                       第<?php echo $v['period'];  ?>期 
+                    </td>               
+                    
+                    <td >
+                       <?php echo $v['user_name'];  ?>
+                    </td>
+                    <td  class="markFlag">
+                       <?php echo $v['mark'];  ?>
+                    </td>
+                    </tr>
+                <?php endforeach ?>
+            </table>
+
         </div>
     </div>
+    <div class="mainText"></div>
 </body>
  <script type="text/javascript" src="statics/js/jquery.js"></script>
-  <script type="text/javascript" src="statics/js/mark.js"></script>
+  <script type="text/javascript" src="statics/js/resultInfo.js"></script>
 </html>
